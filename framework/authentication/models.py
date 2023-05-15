@@ -29,7 +29,7 @@ class DDBAdminUser(models.Model):
     # 锁定时间
     unLock_time = models.DateTimeField()
     # 登录IP历史
-    login_history = models.JSONField()
+    login_history = models.CharField(max_length=2550)
     # 密码过期日期
     passExpireDate = models.DateTimeField()
     # 密码修改日期
