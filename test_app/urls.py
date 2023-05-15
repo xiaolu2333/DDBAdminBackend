@@ -1,0 +1,12 @@
+from django.contrib import admin
+from django.urls import path
+
+from test_app import views
+
+api_version = 'v1'
+
+urlpatterns = [
+    path('index', views.index, name='index'),
+    path('vxe-table_handle_direct_update', views.handle_direct_update, name='direct_update'),
+    path('vxe-table_handle_save_the_update', views.handle_save_the_update, name='save_the_update'),
+]
