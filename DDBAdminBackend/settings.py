@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'framework.resources',
     'framework.dictionaries',
     'framework.strategies',
+    'test_app',
 
     'corsheaders',
 ]
