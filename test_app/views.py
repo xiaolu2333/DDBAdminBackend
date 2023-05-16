@@ -8,6 +8,11 @@ from test_app.models import TestData
 
 
 def index(request):
+    """
+    vex-table局部更新的测试数据
+    :param request:
+    :return:
+    """
     # 从数据库中获取50条数据
     data = TestData.objects.all()[:20]
     # 将 QuerySet 数据添加到 list 中
@@ -27,6 +32,11 @@ def index(request):
 
 @csrf_exempt
 def handle_direct_update(request):
+    """
+    vex-table局部更新之直接更新
+    :param request:
+    :return:
+    """
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
         print('data:', data)
@@ -56,6 +66,11 @@ def handle_direct_update(request):
 
 @csrf_exempt
 def handle_save_the_update(request):
+    """
+    vex-table局部更新之保存更新
+    :param request:
+    :return:
+    """
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
         print('data:', data)
@@ -80,6 +95,11 @@ def handle_save_the_update(request):
 
 
 def pagination_data(request):
+    """
+    测试分页功能
+    :param request:
+    :return:
+    """
     if request.method == 'GET':
         # 获取所有数据
         all_data = TestData.objects.all()
@@ -103,6 +123,22 @@ def pagination_data(request):
             'totalRow': paginator.count,
             'totalPage': total_page,
         }, safe=False)
+
+
+def use_echarts_line_chart(request):
+    """
+    echarts 折线图数据
+    :param request:
+    :return:
+    """
+    # 生成12个随机整数
+    import random
+    data = [random.randint(0, 100) for _ in range(12)]
+    return JsonResponse({
+        'code': 200,
+        'msg': 'success',
+        'data': data,
+    }, safe=False)
 
 
 def create_test_data():

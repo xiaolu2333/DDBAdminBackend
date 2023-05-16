@@ -9,5 +9,8 @@ urlpatterns = [
     path('index', views.index, name='index'),
     path('vxe-table_handle_direct_update', views.handle_direct_update, name='direct_update'),
     path('vxe-table_handle_save_the_update', views.handle_save_the_update, name='save_the_update'),
+
     path('pagination_data', views.pagination_data, name='pagination_data'),
+
+    path('use_echarts_line_chart', views.use_echarts_line_chart, name='use_echarts_line_chart'),
 ]
