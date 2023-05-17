@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from utils.fake_data import fake_user, fake_time, fake_text_content
 from test_app.models import TestData
+from utils.fake_data.fake_user import test_1
 
 
 def index(request):
@@ -142,8 +143,6 @@ def scroll_pagination_data(request):
         paginator = Paginator(all_data, page_size)
         # 获取指定页码的数据
         current_page = paginator.get_page(page_index)
-        # 获取页面总数
-        total_page = paginator.count // page_size + 1
 
         query_data = list(current_page.object_list.values())
         return_data = []
