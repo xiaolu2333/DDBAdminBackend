@@ -3,7 +3,7 @@ import json
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from utils.fake_data.fake_user import *
+from utils.fake_data import fake_user, fake_time, fake_text_content
 from test_app.models import TestData
 
 
@@ -106,7 +106,7 @@ def pagination_data(request):
         # 设置每页显示的数据条数
         page_index = int(request.GET.get('pageIndex', 1))
         # 获取当前页码，如果没有传递，则默认为第一页
-        page_size = int(request.GET.get('pageSize', 20))
+        page_size = int(request.GET.get('pageSize', 10))
         # 创建 Paginator 对象，指定每页的数据条数
         paginator = Paginator(all_data, page_size)
         # 获取指定页码的数据
@@ -122,6 +122,49 @@ def pagination_data(request):
             'pageSize': page_size,
             'totalRow': paginator.count,
             'totalPage': total_page,
+        }, safe=False)
+
+
+def scroll_pagination_data(request):
+    """
+    测试滚动加载功能
+    :param request:
+    :return:
+    """
+    if request.method == 'GET':
+        # 获取所有数据
+        all_data = TestData.objects.all()
+        # 设置每页显示的数据条数
+        page_index = int(request.GET.get('pageIndex', 1))
+        # 获取当前页码，如果没有传递，则默认为第一页
+        page_size = int(request.GET.get('pageSize', 10))
+        # 创建 Paginator 对象，指定每页的数据条数
+        paginator = Paginator(all_data, page_size)
+        # 获取指定页码的数据
+        current_page = paginator.get_page(page_index)
+        # 获取页面总数
+        total_page = paginator.count // page_size + 1
+
+        query_data = list(current_page.object_list.values())
+        return_data = []
+        # 构造返回数据
+        for i in range(len(query_data)):
+            item = {
+                "user": query_data[i]['name'],
+                "operation": fake_text_content.test_0(),
+                "time": fake_time.test_0()
+            }
+            print(item)
+            return_data.append(item)
+
+        # 如果 len(query_data) < page_size，则表示还有数据，否则表示没有数据了
+        has_more = True
+
+        return JsonResponse({
+            'code': 200,
+            'msg': 'success',
+            'dataList': return_data,
+            'hasMore': has_more,
         }, safe=False)
 
 
