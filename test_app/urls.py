@@ -15,6 +15,10 @@ urlpatterns = [
 
     path('use_echarts_line_chart', views.use_echarts_line_chart, name='use_echarts_line_chart'),
 
+    # 一般文件上传与下载
     path('upload_file', views.upload_file, name='upload_file'),
     path('download_file', views.download_file, name='download_file'),
+    # 表单文件上传与下载
+    path('upload_form_file', views.upload_form_file, name='upload_form_file'),
+    path('download_form_file', views.download_form_file, name='download_form_file'),
 ]

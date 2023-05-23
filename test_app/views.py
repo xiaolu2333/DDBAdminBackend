@@ -239,22 +239,6 @@ def file_iterator(file_name, chunk_size=512):
                 break
 
 
-# def big_file_download(filename):
-#     try:
-#         response = StreamingHttpResponse(file_iterator(filename))
-#         # 增加headers
-#         response['Content-Type'] = 'application/octet-stream'
-#         response['Access-Control-Expose-Headers'] = "Content-Disposition, Content-Type"
-#         response['Content-Disposition'] = "attachment; filename={}".format(escape_uri_path(filename))
-#         return response
-#     except Exception:
-#         return JsonResponse({
-#             'code': 500,
-#             'msg': 'error',
-#             'data': '下载失败',
-#         })
-
-
 # 下载文件
 def download_file(request):
     if request.method == 'GET':
@@ -272,21 +256,40 @@ def download_file(request):
                 'msg': 'error',
                 'data': '下载失败',
             })
-        # response = big_file_download(filename)
-        # if response:
-        #     return response
-        #
-        # return JsonResponse({
-        #     'code': 500,
-        #     'msg': 'error',
-        #     'data': '下载失败',
-        # })
     else:
         return JsonResponse({
             'code': 500,
             'msg': 'error',
             'data': '请求方式错误',
         })
+
+
+@csrf_exempt
+def upload_form_file(request):
+    if request.method == 'POST':
+        # 获取表单数据
+        print('request.POST:', request.POST)
+
+        # print('request.FILES:', request.FILES)
+        # # 获取文件对象
+        # file = request.FILES.get('file')
+        # print("{0}".format(file.name))
+        # # 将文件大小转为 KB，保留两位小数
+        # print('文件大小 %.2f kb' % (file.size / 1024))
+        # print('文件类型 {}'.format(file.content_type))
+        # # 保存文件，通过文件对象的 chunks() 方法，一块一块的保存，防止文件过大，导致内存溢出
+        # with open(file.name, 'wb') as f:
+        #     for chunk in file.chunks():
+        #         f.write(chunk)
+        return JsonResponse({
+            'code': 200,
+            'msg': 'success',
+            'data': '上传成功',
+        })
+
+
+def download_form_file(request):
+    pass
 
 
 if '__main__' == __name__:
