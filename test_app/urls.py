@@ -14,4 +14,7 @@ urlpatterns = [
     path('scroll_pagination_data', views.scroll_pagination_data, name='scroll_pagination_data'),
 
     path('use_echarts_line_chart', views.use_echarts_line_chart, name='use_echarts_line_chart'),
+
+    path('upload_file', views.upload_file, name='upload_file'),
+    path('download_file', views.download_file, name='download_file'),
 ]

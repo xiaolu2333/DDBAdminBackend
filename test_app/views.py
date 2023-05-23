@@ -1,4 +1,5 @@
 import json
+import os
 
 from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse, StreamingHttpResponse
@@ -219,15 +220,17 @@ def upload_file(request):
         })
 
 
-def file_iterator(file_path, chunk_size=512):
+def file_iterator(file_name, chunk_size=512):
     """
     文件生成器,防止文件过大，导致内存溢出
-    :param file_path: 文件绝对路径
+    :param file_path: 文件名
     :param chunk_size: 块大小
     :return: 生成器
     """
+    from DDBAdminBackend.settings import BASE_DIR
+    path = os.path.join(BASE_DIR, file_name)
     # 读取大文件
-    with open(file_path, mode='rb') as f:
+    with open('user_info.csv', mode='rb') as f:
         while True:
             file = f.read(chunk_size)
             if file:
@@ -255,7 +258,7 @@ def file_iterator(file_path, chunk_size=512):
 # 下载文件
 def download_file(request):
     if request.method == 'GET':
-        filename = 'user_info_small.csv'
+        filename = 'user_info.csv'
         try:
             response = StreamingHttpResponse(file_iterator(filename))
             # 增加headers
