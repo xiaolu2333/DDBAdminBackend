@@ -1,6 +1,7 @@
 import json
 
 from django.core.paginator import Paginator
+from django.db import IntegrityError
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -56,15 +57,31 @@ def create_organization(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
         print('data:', data)
-        # 将数据插入到数据库
-        Organization.objects.create(**data)
+        # 将 data.parentCode 转换为 parent_code
+        data['parent_code'] = data.pop('parentCode')
         try:
+            # 将数据插入到数据库
+            Organization.objects.create(**data)
+
             return JsonResponse({
                 'code': 200,
                 'msg': 'success',
                 'data': data
             })
         except Exception as e:
+            return JsonResponse({
+                'code': 500,
+                'msg': 'error',
+                'data': str(e),
+            })
+        except IntegrityError as e:
+            message = str(e).split(":")
+            if message[0] == 'UNIQUE constraint failed':
+                return JsonResponse({
+                    'code': 500,
+                    'msg': 'error',
+                    'data': '机构代码已存在',
+                })
             return JsonResponse({
                 'code': 500,
                 'msg': 'error',
