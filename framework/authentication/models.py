@@ -10,34 +10,12 @@ class DDBAdminUser(models.Model):
     id = models.AutoField(primary_key=True)
     # 用户名
     user_name = models.CharField(max_length=255)
-    # 用户编码
-    user_code = models.CharField(max_length=255)
     # 用户密码
     password = models.CharField(max_length=255)
-    # 用户密级
-    secret_level = models.CharField(max_length=255)
-    # # 用户所属机构
-    # org = models.ForeignKey('Organization', on_delete=models.CASCADE)
-    # # 用户所属部门
-    # dept = models.ForeignKey('Department', on_delete=models.CASCADE)
-    # # 用户所属角色
-    # role = models.ForeignKey('DDBAdminRole', on_delete=models.CASCADE)
+    # 用户所属部门
+    dept = models.ForeignKey(Department, on_delete=models.CASCADE)
     # 是否启用
     enabled = models.BooleanField(default=True)
-    # 是否锁定
-    locked = models.BooleanField(default=False)
-    # 锁定时间
-    unLock_time = models.DateTimeField()
-    # 登录IP历史
-    login_history = models.CharField(max_length=2550)
-    # 密码过期日期
-    passExpireDate = models.DateTimeField()
-    # 密码修改日期
-    passChangeDate = models.DateTimeField()
-    # 排序号
-    sortNum = models.IntegerField()
-    # 备注
-    remark = models.TextField()
     # 创建时间
     create_time = models.DateTimeField(auto_now_add=True)
     # 更新时间

@@ -12,12 +12,6 @@ class Organization(models.Model):
     parent_code = models.CharField(max_length=255, null=True)
     # 是否启用
     enabled = models.BooleanField(default=True)
-    # 排序号
-    sort_number = models.IntegerField(default=0)
-    # 机构层级
-    level = models.CharField(max_length=255)
-    # 机构描述
-    org_desc = models.TextField()
     # 创建时间
     create_time = models.DateTimeField(auto_now_add=True)
     # 更新时间
