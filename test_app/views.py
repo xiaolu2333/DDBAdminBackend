@@ -1,7 +1,8 @@
 import json
 
 from django.core.paginator import Paginator
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, StreamingHttpResponse
+from django.utils.encoding import escape_uri_path
 from django.views.decorators.csrf import csrf_exempt
 from utils.fake_data import fake_user, fake_time, fake_text_content
 from test_app.models import TestData
@@ -188,6 +189,101 @@ def create_test_data():
     # 将 fake_data 中的数据存入sqlite数据库
     for data in fake_data:
         TestData.objects.create(**data)
+
+
+# 上传文件
+@csrf_exempt
+def upload_file(request):
+    if request.method == 'POST':
+        print('request.FILES:', request.FILES)
+        # 获取文件对象
+        file = request.FILES.get('file')
+        print("{0}".format(file.name))
+        # 将文件大小转为 KB，保留两位小数
+        print('文件大小 %.2f kb' % (file.size / 1024))
+        print('文件类型 {}'.format(file.content_type))
+        # 保存文件，通过文件对象的 chunks() 方法，一块一块的保存，防止文件过大，导致内存溢出
+        with open(file.name, 'wb') as f:
+            for chunk in file.chunks():
+                f.write(chunk)
+        return JsonResponse({
+            'code': 200,
+            'msg': 'success',
+            'data': '上传成功',
+        })
+    else:
+        return JsonResponse({
+            'code': 500,
+            'msg': 'error',
+            'data': '请求方式错误',
+        })
+
+
+def file_iterator(file_path, chunk_size=512):
+    """
+    文件生成器,防止文件过大，导致内存溢出
+    :param file_path: 文件绝对路径
+    :param chunk_size: 块大小
+    :return: 生成器
+    """
+    # 读取大文件
+    with open(file_path, mode='rb') as f:
+        while True:
+            file = f.read(chunk_size)
+            if file:
+                yield file
+            else:
+                break
+
+
+# def big_file_download(filename):
+#     try:
+#         response = StreamingHttpResponse(file_iterator(filename))
+#         # 增加headers
+#         response['Content-Type'] = 'application/octet-stream'
+#         response['Access-Control-Expose-Headers'] = "Content-Disposition, Content-Type"
+#         response['Content-Disposition'] = "attachment; filename={}".format(escape_uri_path(filename))
+#         return response
+#     except Exception:
+#         return JsonResponse({
+#             'code': 500,
+#             'msg': 'error',
+#             'data': '下载失败',
+#         })
+
+
+# 下载文件
+def download_file(request):
+    if request.method == 'GET':
+        filename = 'user_info_small.csv'
+        try:
+            response = StreamingHttpResponse(file_iterator(filename))
+            # 增加headers
+            response['Content-Type'] = 'application/octet-stream'
+            response['Access-Control-Expose-Headers'] = "Content-Disposition, Content-Type"
+            response['Content-Disposition'] = "attachment; filename={}".format(escape_uri_path(filename))
+            return response
+        except Exception:
+            return JsonResponse({
+                'code': 500,
+                'msg': 'error',
+                'data': '下载失败',
+            })
+        # response = big_file_download(filename)
+        # if response:
+        #     return response
+        #
+        # return JsonResponse({
+        #     'code': 500,
+        #     'msg': 'error',
+        #     'data': '下载失败',
+        # })
+    else:
+        return JsonResponse({
+            'code': 500,
+            'msg': 'error',
+            'data': '请求方式错误',
+        })
 
 
 if '__main__' == __name__:
