@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from framework.organizations.models import Organization
 
 
-def get_organization(request):
+def get_organization_list(request):
     """
     获取机构列表
     :return: 机构列表树形结构
@@ -45,6 +45,39 @@ def get_organization(request):
             'msg': 'success',
             'dataList': return_data,
         }, safe=False)
+
+
+def get_organization_detail(request):
+    # 获取路径参数 id
+    id = request.GET.get('id', None)
+    if id is not None:
+        # 获取指定 id 的数据
+        query_data = Organization.objects.filter(id=id).values()
+        return_data = []
+        # 构造返回数据
+        for i in range(len(query_data)):
+            item = {
+                'id': query_data[i]['id'],
+                'name': query_data[i]['name'],
+                'code': query_data[i]['code'],
+                'parentCode': query_data[i]['parent_code'],
+                'enabled': query_data[i]['enabled'],
+                'createTime': query_data[i]['create_time'],
+                'updateTime': query_data[i]['update_time'],
+            }
+            return_data.append(item)
+
+        return JsonResponse({
+            'code': 200,
+            'msg': 'success',
+            'data': return_data,
+        }, safe=False)
+    else:
+        return JsonResponse({
+            'code': 500,
+            'msg': 'error',
+            'data': 'id is required',
+        })
 
 
 @csrf_exempt
