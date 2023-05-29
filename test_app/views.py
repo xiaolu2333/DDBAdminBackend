@@ -30,7 +30,11 @@ def index(request):
         )
 
     # 返回json数据
-    return JsonResponse(data_list, safe=False)
+    return JsonResponse({
+        'code': 200,
+        'msg': 'success',
+        'dataList': data_list,
+    }, safe=False)
 
 
 @csrf_exempt
