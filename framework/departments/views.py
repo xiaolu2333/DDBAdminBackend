@@ -84,11 +84,15 @@ def create_department(request):
     :return:
     """
     if request.method == 'POST':
+        print('request.body:', request.body)
         data = json.loads(request.body.decode('utf-8'))
         print('data:', data)
         # 将 data.parentCode 转换为 parent_code
         data['parent_code'] = data.pop('parentCode')
         try:
+            # 数据预处理
+            data['parent_code'] = data.pop('parentCode')
+            data['org_id'] = data.pop('orgId')
             # 将数据插入到数据库
             Department.objects.create(**data)
 
