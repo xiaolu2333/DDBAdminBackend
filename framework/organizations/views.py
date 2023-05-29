@@ -52,20 +52,16 @@ def get_organization_detail(request):
     id = request.GET.get('id', None)
     if id is not None:
         # 获取指定 id 的数据
-        query_data = Organization.objects.filter(id=id).values()
-        return_data = []
-        # 构造返回数据
-        for i in range(len(query_data)):
-            item = {
-                'id': query_data[i]['id'],
-                'name': query_data[i]['name'],
-                'code': query_data[i]['code'],
-                'parentCode': query_data[i]['parent_code'],
-                'enabled': query_data[i]['enabled'],
-                'createTime': query_data[i]['create_time'],
-                'updateTime': query_data[i]['update_time'],
-            }
-            return_data.append(item)
+        query_data = Organization.objects.filter(id=id).values()[0]
+        return_data = {
+            'id': query_data['id'],
+            'name': query_data['name'],
+            'code': query_data['code'],
+            'parentCode': query_data['parent_code'],
+            'enabled': query_data['enabled'],
+            'createTime': query_data['create_time'],
+            'updateTime': query_data['update_time'],
+        }
 
         return JsonResponse({
             'code': 200,
@@ -119,6 +115,86 @@ def create_organization(request):
                 'code': 500,
                 'msg': 'error',
                 'data': str(e),
+            })
+    else:
+        return JsonResponse({
+            'code': 500,
+            'msg': 'error',
+            'data': '请求方式错误',
+        })
+
+
+@csrf_exempt
+def update_organization(request):
+    # 更新机构
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        print('data:', data)
+        # 获取 id
+        id = data.get('id', None)
+        if id is not None:
+            # 将 data.parentCode 转换为 parent_code
+            data['parent_code'] = data.pop('parentCode')
+            try:
+                # 更新数据
+                Organization.objects.filter(id=id).update(**data)
+                return JsonResponse({
+                    'code': 200,
+                    'msg': 'success',
+                    'data': data
+                })
+            except Exception as e:
+                return JsonResponse({
+                    'code': 500,
+                    'msg': 'error',
+                    'data': str(e),
+                })
+        else:
+            return JsonResponse({
+                'code': 500,
+                'msg': 'error',
+                'data': 'id is required',
+            })
+    else:
+        return JsonResponse({
+            'code': 500,
+            'msg': 'error',
+            'data': '请求方式错误',
+        })
+
+
+@csrf_exempt
+def delete_organization(request):
+    """
+    删除机构
+    :param request:
+    :return:
+    """
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        print('data:', data)
+        # 获取路径参数 id
+        id = data.get('id', None)
+        if id is not None:
+            try:
+                # 删除指定 id 的数据
+                Organization.objects.filter(id=id).delete()
+                return JsonResponse({
+                    'code': 200,
+                    'msg': 'success',
+                    'data': data
+                })
+            except Exception as e:
+                return JsonResponse({
+                    'code': 500,
+                    'msg': 'error',
+                    'data': str(e),
+                })
+        else:
+            return JsonResponse({
+                'code': 500,
+                'msg': 'error',
+                'data': 'id is required',
             })
     else:
         return JsonResponse({

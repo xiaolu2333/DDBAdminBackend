@@ -8,7 +8,7 @@ class Department(models.Model):
     code = models.CharField("部门代码", max_length=255)
     parentCode = models.CharField("上级部门", max_length=255)
     enabled = models.BooleanField("启用")
-    org = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    org_id = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
