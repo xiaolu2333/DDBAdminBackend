@@ -16,6 +16,27 @@ def index(request):
     :param request:
     :return:
     """
+    # 将数据插入到数据库中
+    # from faker import Faker
+    # faker = Faker(locale='zh_CN')
+    # user_info_list = []
+    #
+    # for i in range(500):
+    #     name = faker.name()
+    #     # 随机生成一个整数
+    #     status = faker.random_int(min=0, max=99999)
+    #     user_info_list.append(
+    #         {
+    #             "name": name,
+    #             "status": status,
+    #         }
+    #     )
+    #
+    # TestData.objects.bulk_create(
+    #     [TestData(name=i['name'], status=i['status']) for i in user_info_list]
+    # )
+    # return HttpResponse('ok')
+
     # 从数据库中获取50条数据
     data = TestData.objects.all()[:20]
     # 将 QuerySet 数据添加到 list 中
@@ -28,7 +49,7 @@ def index(request):
                 "status": i.status,
             }
         )
-
+    print('data_list:', data_list)
     # 返回json数据
     return JsonResponse({
         'code': 200,
@@ -79,13 +100,21 @@ def handle_save_the_update(request):
     :return:
     """
     if request.method == 'POST':
-        data = json.loads(request.body.decode('utf-8'))
-        print('data:', data)
+        data = json.loads(request.body.decode('utf-8'))['data']
         try:
+            # 更新数据
+            TestData.objects.filter(id=int(data['id'])).update(**data)
+            d = TestData.objects.get(id=int(data['id']))
+            # 转为json格式
+            d = {
+                "id": d.id,
+                "name": d.name,
+                "status": d.status,
+            }
             return JsonResponse({
                 'code': 200,
                 'msg': 'success',
-                'data': data
+                'data': d
             })
         except Exception as e:
             return JsonResponse({
