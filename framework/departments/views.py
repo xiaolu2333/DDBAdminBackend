@@ -16,36 +16,25 @@ def get_department_list(request):
     :return: 部门列表树形结构
     """
     if request.method == 'GET':
-        org_id = int(request.GET.get('orgId', None))
+        org_id = request.GET.get('orgId', None)
         if org_id:
-            org = Organization.objects.get(id=org_id)
-            if org is None:
-                # 获取所有数据
-                all_data = Department.objects.all()
-                # 设置每页显示的数据条数
-                page_index = int(request.GET.get('pageIndex', 1))
-                # 获取当前页码，如果没有传递，则默认为第一页
-                page_size = int(request.GET.get('pageSize', 10))
-                # 创建 Paginator 对象，指定每页的数据条数
-                paginator = Paginator(all_data, page_size)
-                # 获取指定页码的数据
-                current_page = paginator.get_page(page_index)
-
-                query_data = list(current_page.object_list.values())
+            org = Organization.objects.get(id=int(org_id))
+            if org is not None:
                 return_data = []
-                from django.core.serializers.json import DjangoJSONEncoder
+                query_data = Department.objects.filter(org_id=org)
 
                 # 构造返回数据
                 for i in range(len(query_data)):
                     item = {
-                        'id': query_data[i]['id'],
-                        'name': query_data[i]['name'],
-                        'code': query_data[i]['code'],
-                        'parentCode': query_data[i]['parent_code'],
-                        'enabled': query_data[i]['enabled'],
-                        'createTime': query_data[i]['create_time'],
-                        'updateTime': query_data[i]['update_time'],
-                        'org': DjangoJSONEncoder().encode(model_to_dict(org)),
+                        'id': query_data[i].id,
+                        'name': query_data[i].name,
+                        'code': query_data[i].code,
+                        'parentCode': query_data[i].parent_code,
+                        'enabled': query_data[i].enabled,
+                        'createTime': query_data[i].create_time,
+                        'updateTime': query_data[i].update_time,
+                        'org': query_data[i].org_id.id,
+                        # 'data': DjangoJSONEncoder().encode(model_to_dict(org)),
                     }
                     return_data.append(item)
 
@@ -75,17 +64,18 @@ def get_department_list(request):
 
 
 def get_department_detail(request):
-    # 获取路径参数 id
+    # 获取请求参数 id
     id = request.GET.get('id', None)
     if id is not None:
         # 获取指定 id 的数据
-        query_data = Department.objects.filter(id=id).values()[0]
+        query_data = Department.objects.filter(id=int(id)).values()[0]
         return_data = {
             'id': query_data['id'],
             'name': query_data['name'],
             'code': query_data['code'],
             'parentCode': query_data['parent_code'],
             'enabled': query_data['enabled'],
+            'orgId': query_data['org_id_id'],
             'createTime': query_data['create_time'],
             'updateTime': query_data['update_time'],
         }
