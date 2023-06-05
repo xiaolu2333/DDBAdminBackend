@@ -102,3 +102,63 @@ def create_user(request):
             'data': '请求方式错误',
         })
 
+
+def create_role(request):
+    """
+    创建角色
+    :param request:
+    :return:
+    """
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+
+        try:
+            # 将数据插入到数据库
+            Role.objects.create(**data)
+
+            return JsonResponse({
+                'code': 200,
+                'msg': 'success',
+                'data': data
+            })
+        except Exception as e:
+            return JsonResponse({
+                'code': 500,
+                'msg': 'error',
+                'data': str(e),
+            })
+        except IntegrityError as e:
+            message = str(e).split(":")
+            if message[0] == 'UNIQUE constraint failed':
+                return JsonResponse({
+                    'code': 500,
+                    'msg': 'error',
+                    'data': '角色代码已存在',
+                })
+            return JsonResponse({
+                'code': 500,
+                'msg': 'error',
+                'data': str(e),
+            })
+    else:
+        return JsonResponse({
+            'code': 500,
+            'msg': 'error',
+            'data': '请求方式错误',
+        })
+
+
+def update_role(request):
+    pass
+
+
+def delete_role(request):
+    pass
+
+
+def get_role_list(request):
+    pass
+
+
+def get_role_detail(request):
+    pass

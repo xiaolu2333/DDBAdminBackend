@@ -17,4 +17,5 @@ class Department(models.Model):
         return self.name
 
     class Meta:
+        db_table = 'ddb_department'
         ordering = ['id']
