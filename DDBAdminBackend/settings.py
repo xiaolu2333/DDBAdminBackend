@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'framework.dictionaries',
     'framework.strategies',
     'test_app',
+    'data_management.data_tree_manage',
 
     'corsheaders',
 ]
