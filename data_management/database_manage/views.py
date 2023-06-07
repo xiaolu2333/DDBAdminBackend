@@ -170,3 +170,42 @@ def authorize_db_table(request):
         'msg': 'success',
         'data': '数据库表授权',
     })
+
+
+def configure_db_hba(request):
+    """
+    配置数据库hba文件
+    :param request:
+    :return:
+    """
+    return JsonResponse({
+        'code': 200,
+        'msg': 'success',
+        'data': '配置数据库hba文件',
+    })
+
+
+def configure_db_conf(request):
+    """
+    配置数据库conf文件
+    :param request:
+    :return:
+    """
+    return JsonResponse({
+        'code': 200,
+        'msg': 'success',
+        'data': '配置数据库conf文件',
+    })
+
+
+def configure_db_bouncer(request):
+    """
+    配置数据库连接池
+    :param request:
+    :return:
+    """
+    return JsonResponse({
+        'code': 200,
+        'msg': 'success',
+        'data': '配置数据库连接池',
+    })
