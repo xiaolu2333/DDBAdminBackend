@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'framework.strategies',
     'test_app',
     'data_management.data_tree_manage',
+    'data_management.database_manage',
 
     'corsheaders',
 ]
