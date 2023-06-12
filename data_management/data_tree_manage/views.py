@@ -19,13 +19,20 @@ def index(request):
     list = []
     # 为nodes中数据添加children属性
     for i in nodes:
-        list.append(
-            {'id': i.id, 'server_group_name': i.server_group_name, 'server_name': i.server_name, 'db_name': i.db_name,
-             'node_type': i.node_type, 'name': i.name, 'code': i.code, 'parent_code': i.parent_code, 'children': []})
-    print('list:', list)
+        list.append({
+            'id': i.id,
+            'server_group_name': i.server_group_name,
+            'server_name': i.server_name,
+            'db_name': i.db_name,
+            'node_type': i.node_type,
+            'name': i.name,
+            'code': i.code,
+            'parent_code': i.parent_code,
+            'label': i.name,
+            'children': []
+        })
 
     tree_data = build_tree(list)
-    print(tree_data)
 
     return JsonResponse({
         'code': 200,
