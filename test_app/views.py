@@ -3,7 +3,7 @@ import os
 
 from django.core.files.base import ContentFile
 from django.core.paginator import Paginator
-from django.http import JsonResponse, HttpResponse, StreamingHttpResponse
+from django.http import JsonResponse, HttpResponse, StreamingHttpResponse, FileResponse
 from django.utils.encoding import escape_uri_path
 from django.views.decorators.csrf import csrf_exempt
 
@@ -279,17 +279,58 @@ def file_iterator(file_name, chunk_size=512):
                 break
 
 
-# 下载文件
-def download_file(request):
+# 流下载文件
+def download_file_by_stream(request):
     if request.method == 'GET':
-        filename = '并行分布式数据库设计方案.docx'
+        filename = 'Django Styleguide.pdf'
         try:
-            response = StreamingHttpResponse(file_iterator(filename))
+            # 方式一：使用 StreamingHttpResponse() 下载文件
+            # # StreamingHttpResponse() 接收一个生成器，返回一个 StreamingHttpResponse 对象
+            # response = StreamingHttpResponse(file_iterator(filename))
+            # 方式二：使用 FileResponse() 下载文件
+            # # FileResponse() 接收一个文件对象，返回一个 FileResponse 对象，直接将文件以小块的形式返回给客户端
+            path = os.path.join(BASE_DIR, 'static', 'uploadfiles', filename)
+            file = open(path, 'rb')
+            # 构造 response
+            response = FileResponse(file)
             # 增加headers
             response['Content-Type'] = 'application/octet-stream'  # 告诉浏览器这是一个二进制文件
             response['Access-Control-Expose-Headers'] = "Content-Disposition, Content-Type"  # 允许浏览器访问的headers
             response['Content-Disposition'] = "attachment; filename={}".format(escape_uri_path(filename))  # 下载文件的名称
             return response
+        except FileNotFoundError:
+            return JsonResponse({
+                'code': 500,
+                'msg': 'error',
+                'data': '文件不存在',
+            })
+        except Exception:
+            return JsonResponse({
+                'code': 500,
+                'msg': 'error',
+                'data': '下载失败',
+            })
+    else:
+        return JsonResponse({
+            'code': 500,
+            'msg': 'error',
+            'data': '请求方式错误',
+        })
+
+
+# url 下载文件
+def download_file_by_url(request):
+    if request.method == 'GET':
+        filename = 'Django Styleguide.pdf'
+        try:
+            # 读取文件
+            path = os.path.join(BASE_DIR, 'static', 'uploadfiles', filename)
+
+            return JsonResponse({
+                'code': 200,
+                'msg': 'success',
+                'data': path
+            })
         except FileNotFoundError:
             return JsonResponse({
                 'code': 500,
