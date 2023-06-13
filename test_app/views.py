@@ -1,6 +1,7 @@
 import json
 import os
 
+from django.core.files.base import ContentFile
 from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse, StreamingHttpResponse
 from django.utils.encoding import escape_uri_path
@@ -312,20 +313,28 @@ def download_file(request):
 @csrf_exempt
 def upload_form_file(request):
     if request.method == 'POST':
-        # 获取表单数据
-        print('request.POST:', request.POST)
+        # 获取POST请求中的数据
+        post_data = request.POST
+        print('post_data:', post_data)
 
-        # print('request.FILES:', request.FILES)
-        # # 获取文件对象
-        # file = request.FILES.get('file')
-        # print("{0}".format(file.name))
-        # # 将文件大小转为 KB，保留两位小数
-        # print('文件大小 %.2f kb' % (file.size / 1024))
-        # print('文件类型 {}'.format(file.content_type))
-        # # 保存文件，通过文件对象的 chunks() 方法，一块一块的保存，防止文件过大，导致内存溢出
-        # with open(file.name, 'wb') as f:
-        #     for chunk in file.chunks():
-        #         f.write(chunk)
+        # 获取名字
+        name = post_data.get('name', None)
+        # 获取密码
+        password = post_data.get('password', None)
+
+        # 获取文件对象
+        file = post_data.get('file', None)
+        # 获取文件名
+        file_name = request.POST.get('fileName', None)
+        # 将文件保存到本地
+        file_path = os.path.join(BASE_DIR, 'static', 'uploadfiles', file_name)
+        file = ContentFile(file)
+        # 获取文件大小 kb
+        print('文件大小 %.2f kb' % (file.size / 1024))
+        with open(file_path, 'w') as f:
+            for chunk in file.chunks():
+                f.write(chunk)
+
         return JsonResponse({
             'code': 200,
             'msg': 'success',
