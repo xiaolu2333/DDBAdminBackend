@@ -5,6 +5,8 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse, StreamingHttpResponse
 from django.utils.encoding import escape_uri_path
 from django.views.decorators.csrf import csrf_exempt
+
+from DDBAdminBackend.settings import BASE_DIR
 from utils.fake_data import fake_user, fake_time, fake_text_content
 from test_app.models import TestData
 from utils.fake_data.fake_user import test_1
@@ -236,8 +238,12 @@ def upload_file(request):
         # 将文件大小转为 KB，保留两位小数
         print('文件大小 %.2f kb' % (file.size / 1024))
         print('文件类型 {}'.format(file.content_type))
+
+        # 文件保存路径
+        file_path = os.path.join(BASE_DIR, 'static', 'uploadfiles', file.name)
+
         # 保存文件，通过文件对象的 chunks() 方法，一块一块的保存，防止文件过大，导致内存溢出
-        with open(file.name, 'wb') as f:
+        with open(file_path, 'wb') as f:
             for chunk in file.chunks():
                 f.write(chunk)
         return JsonResponse({
@@ -255,15 +261,15 @@ def upload_file(request):
 
 def file_iterator(file_name, chunk_size=512):
     """
-    文件生成器,防止文件过大，导致内存溢出
-    :param file_path: 文件名
+    文件生成器，防止文件过大，导致内存溢出
+    :param file_name: 文件名
     :param chunk_size: 块大小
     :return: 生成器
     """
     from DDBAdminBackend.settings import BASE_DIR
-    path = os.path.join(BASE_DIR, file_name)
+    path = os.path.join(BASE_DIR, 'static', 'uploadfiles', file_name)
     # 读取大文件
-    with open('user_info.csv', mode='rb') as f:
+    with open(path, mode='rb') as f:
         while True:
             file = f.read(chunk_size)
             if file:
@@ -275,14 +281,20 @@ def file_iterator(file_name, chunk_size=512):
 # 下载文件
 def download_file(request):
     if request.method == 'GET':
-        filename = 'user_info.csv'
+        filename = '并行分布式数据库设计方案.docx'
         try:
             response = StreamingHttpResponse(file_iterator(filename))
             # 增加headers
-            response['Content-Type'] = 'application/octet-stream'
-            response['Access-Control-Expose-Headers'] = "Content-Disposition, Content-Type"
-            response['Content-Disposition'] = "attachment; filename={}".format(escape_uri_path(filename))
+            response['Content-Type'] = 'application/octet-stream'  # 告诉浏览器这是一个二进制文件
+            response['Access-Control-Expose-Headers'] = "Content-Disposition, Content-Type"  # 允许浏览器访问的headers
+            response['Content-Disposition'] = "attachment; filename={}".format(escape_uri_path(filename))  # 下载文件的名称
             return response
+        except FileNotFoundError:
+            return JsonResponse({
+                'code': 500,
+                'msg': 'error',
+                'data': '文件不存在',
+            })
         except Exception:
             return JsonResponse({
                 'code': 500,
