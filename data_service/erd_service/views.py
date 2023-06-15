@@ -14,55 +14,39 @@ def index(request):
         'linkDataArray': []
     }
 
-    products = {
-        'key': "Products",
-        'items': [
-            {'name': "ProductID", 'iskey': True, 'figure': "Decision", 'color': 'red'},
-            {'name': "ProductName", 'iskey': False, 'figure': "Hexagon", 'color': 'blue'},
-            {'name': "SupplierID", 'iskey': False, 'figure': "Decision", 'color': "purple"},
-            {'name': "CategoryID", 'iskey': False, 'figure': "Decision", 'color': "purple"}
-        ]
+    Record1 = {
+        "key": "Record1",
+        "fields": [
+            {"name": "field1", "info": "", "color": "#F7B84B", "figure": "Ellipse"},
+            {"name": "field2", "info": "the second one", "color": "#F25022", "figure": "Ellipse"},
+            {"name": "fieldThree", "info": "3rd", "color": "#00BCF2"}
+        ],
+        "loc": "0 0"
     }
-    data['nodeDataArray'].append(products)
-
-    suppliers = {
-        'key': "Suppliers",
-        'items': [
-            {'name': "SupplierID", 'iskey': True, 'figure': "Decision", 'color': 'red'},
-            {'name': "CompanyName", 'iskey': False, 'figure': "Hexagon", 'color': 'blue'},
-            {'name': "ContactName", 'iskey': False, 'figure': "Hexagon", 'color': 'blue'},
-            {'name': "Address", 'iskey': False, 'figure': "Hexagon", 'color': 'blue'}
-        ]
+    Record2 = {
+        "key": "Record2",
+        "fields": [
+            {"name": "fieldA", "info": "", "color": "#FFB900", "figure": "Diamond"},
+            {"name": "fieldB", "info": "", "color": "#F25022", "figure": "Rectangle"},
+            {"name": "fieldC", "info": "", "color": "#7FBA00", "figure": "Diamond"},
+            {"name": "fieldD", "info": "fourth", "color": "#00BCF2", "figure": "Rectangle"}
+        ],
+        "loc": "280 0"
     }
-    data['nodeDataArray'].append(suppliers)
-
-    categories = {
-        'key': "Categories",
-        'items': [
-            {'name': "CategoryID", 'iskey': True, 'figure': "Decision", 'color': 'red'},
-            {'name': "CategoryName", 'iskey': False, 'figure': "Hexagon", 'color': 'blue'},
-            {'name': "Description", 'iskey': False, 'figure': "Hexagon", 'color': 'blue'},
-            {'name': "Picture", 'iskey': False, 'figure': "TriangleUp", 'color': 'pink'}
-        ]
+    Record3 = {
+        "key": "Record3",
+        "fields": [
+            {"name": "fieldA", "info": "", "color": "#FFB900", "figure": "Diamond"},
+            {"name": "fieldB", "info": "", "color": "#F25022", "figure": "Rectangle"},
+            {"name": "fieldD", "info": "fourth", "color": "#00BCF2", "figure": "Rectangle"}
+        ],
+        "loc": "280 0"
     }
-    data['nodeDataArray'].append(categories)
-
-    order_details = {
-        'key': 'Order Details',
-        'items': [
-            {'name': 'OrderID', 'iskey': True, 'figure': "Decision", 'color': 'red'},
-            {'name': 'ProductID', 'iskey': True, 'figure': "Decision", 'color': 'red'},
-            {'name': 'UnitPrice', 'iskey': False, 'figure': "Circle", 'color': 'green'},
-            {'name': 'Quantity', 'iskey': False, 'figure': "Circle", 'color': 'green'},
-            {'name': 'Discount', 'iskey': False, 'figure': "Circle", 'color': 'green'},
-        ]
-    }
-    data['nodeDataArray'].append(order_details)
+    data['nodeDataArray'] = [Record1, Record2, Record3]
 
     link_data = [
-        {'from': "Products", 'to': "Suppliers", 'text': "ProductID M", 'toText': "SupplierID 1"},
-        # {'from': "Products", 'to': "Categories", 'text': "ProductID M", 'toText': "CategoryID 1"},
-        {'from': "Order Details", 'to': "Products", 'text': "ProductID M", 'toText': "ProductID 1"}
+        {"from": "Record1", "fromPort": "field1", "to": "Record2", "toPort": "fieldA"},
+        {"from": "Record1", "fromPort": "field2", "to": "Record3", "toPort": "fieldD"},
     ]
     data['linkDataArray'] = link_data
 
