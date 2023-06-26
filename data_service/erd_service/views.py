@@ -17,28 +17,28 @@ def index(request):
     Record1 = {
         "key": "Record1",
         "fields": [
-            {"name": "field1", "info": "", "color": "#F7B84B", "figure": "Ellipse"},
-            {"name": "field2", "info": "the second one", "color": "#F25022", "figure": "Ellipse"},
-            {"name": "fieldThree", "info": "3rd", "color": "#00BCF2"}
+            {"name": "field1", "info": "date", "color": "#F7B84B", "figure": "Ellipse", 'icon': '主键'},
+            {"name": "field2", "info": "boolean", "color": "#F25022", "figure": "Ellipse", 'icon': '外键'},
+            {"name": "fieldThree", "info": "inet", "color": "#00BCF2", 'icon': '字段'},
         ],
         "loc": "0 0"
     }
     Record2 = {
         "key": "Record2",
         "fields": [
-            {"name": "fieldA", "info": "", "color": "#FFB900", "figure": "Diamond"},
-            {"name": "fieldB", "info": "", "color": "#F25022", "figure": "Rectangle"},
-            {"name": "fieldC", "info": "", "color": "#7FBA00", "figure": "Diamond"},
-            {"name": "fieldD", "info": "fourth", "color": "#00BCF2", "figure": "Rectangle"}
+            {"name": "fieldA", "info": "integer", "color": "#FFB900", "figure": "Diamond", 'icon': '主键'},
+            {"name": "fieldB", "info": "integer", "color": "#F25022", "figure": "Rectangle", 'icon': '字段'},
+            {"name": "fieldC", "info": "char var", "color": "#7FBA00", "figure": "Diamond", 'icon': '字段'},
+            {"name": "fieldD", "info": "char var", "color": "#00BCF2", "figure": "Rectangle", 'icon': '字段'}
         ],
         "loc": "280 0"
     }
     Record3 = {
         "key": "Record3",
         "fields": [
-            {"name": "fieldA", "info": "", "color": "#FFB900", "figure": "Diamond"},
-            {"name": "fieldB", "info": "", "color": "#F25022", "figure": "Rectangle"},
-            {"name": "fieldD", "info": "fourth", "color": "#00BCF2", "figure": "Rectangle"}
+            {"name": "fieldA", "info": "char var", "color": "#FFB900", "figure": "Diamond", 'icon': '主键'},
+            {"name": "fieldB", "info": "char var", "color": "#F25022", "figure": "Rectangle", 'icon': '字段'},
+            {"name": "fieldD", "info": "real", "color": "#00BCF2", "figure": "Rectangle", 'icon': '字段'}
         ],
         "loc": "280 0"
     }
