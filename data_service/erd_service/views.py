@@ -15,6 +15,7 @@ def index(request):
     }
 
     Record1 = {
+        "schema": "public",
         "key": "Record1",
         "fields": [
             {"name": "field1", "info": "date", "color": "#F7B84B", "figure": "Ellipse", 'icon': '主键'},
@@ -24,6 +25,7 @@ def index(request):
         "loc": "0 0"
     }
     Record2 = {
+        "schema": "public",
         "key": "Record2",
         "fields": [
             {"name": "fieldA", "info": "integer", "color": "#FFB900", "figure": "Diamond", 'icon': '主键'},
@@ -34,6 +36,7 @@ def index(request):
         "loc": "280 0"
     }
     Record3 = {
+        "schema": "public",
         "key": "Record3",
         "fields": [
             {"name": "fieldA", "info": "char var", "color": "#FFB900", "figure": "Diamond", 'icon': '主键'},
