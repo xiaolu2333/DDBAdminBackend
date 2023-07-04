@@ -5,8 +5,7 @@ def test_0():
     faker = Faker(locale='zh_CN')
     user_info_list = []
 
-    # 生成 1000000 个用户
-    for i in range(500000):
+    for i in range(50000):
         user_name = faker.name()
         # 用用户名的拼音作为 user_code
         user_code = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"

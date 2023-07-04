@@ -387,5 +387,53 @@ def download_form_file(request):
     pass
 
 
+# 文件分块上传
+@csrf_exempt
+def upload_file_by_block(request):
+    if request.method == 'POST':
+        file = request.FILES.get('file')
+        chunk_number = request.POST.get('chunkNumber')
+        total_chunks = request.POST.get('totalChunks')
+        file_name = request.POST.get('fileName')
+        # 检查并创建保存文件的目录
+        save_dir = 'static/uploadfiles/save/files'
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+        # 保存文件块到临时文件
+        temp_file_path = os.path.join(save_dir, f'{file_name}.part{chunk_number}')
+        with open(temp_file_path, 'wb+') as temp_file:
+            for chunk in file.chunks():
+                temp_file.write(chunk)
+        # 检查是否所有文件块都已上传
+        if int(chunk_number) == int(total_chunks) - 1:
+            # 所有文件块已上传，将它们合并成完整文件
+            final_file_path = os.path.join(save_dir, file_name)
+            with open(final_file_path, 'ab') as final_file:
+                for i in range(int(total_chunks)):
+                    temp_file_path = os.path.join(save_dir, f'{file_name}.part{i}')
+                    with open(temp_file_path, 'rb') as temp_file:
+                        final_file.write(temp_file.read())
+                    os.remove(temp_file_path)
+                    # 文件上传完成后的操作
+                    return JsonResponse({
+                        'code': 200,
+                        'msg': 'success',
+                        'data': '文件上传成功',
+                    })
+        else:
+            # 删除临时文件
+            os.remove(temp_file_path)
+            return JsonResponse({
+                'code': 500,
+                'msg': 'fail',
+                'data': '还有文件块未上传',
+            })
+    return JsonResponse({
+        'code': 500,
+        'msg': 'error',
+        'data': '请求方式错误',
+    })
+
+
 if '__main__' == __name__:
     create_test_data()
