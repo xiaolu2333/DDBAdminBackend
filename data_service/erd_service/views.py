@@ -20,7 +20,7 @@ def get_erd_data(request):
         "fields": [
             {"name": "field1", "info": "date", "color": "#F7B84B", "figure": "Ellipse", 'icon': '主键'},
             {"name": "field2", "info": "boolean", "color": "#F25022", "figure": "Ellipse", 'icon': '外键'},
-            {"name": "fieldThree", "info": "inet", "color": "#00BCF2", 'icon': '字段'},
+            {"name": "fieldThree", "info": "inet", "color": "#00BCF2", 'icon': '外键'},
         ],
         "loc": "0 0"
     }
@@ -48,7 +48,7 @@ def get_erd_data(request):
     data['nodeDataArray'] = [Record1, Record2, Record3]
 
     link_data = [
-        {"from": "Record1", "fromPort": "field1", "to": "Record2", "toPort": "fieldA"},
+        {"from": "Record1", "fromPort": "fieldThree", "to": "Record2", "toPort": "fieldA"},
         {"from": "Record1", "fromPort": "field2", "to": "Record3", "toPort": "fieldD"},
         {"from": "Record4", "fromPort": "fieRecord4-1111111111111111", "to": "Record3", "toPort": "fieldB"}
     ]
