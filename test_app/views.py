@@ -456,5 +456,81 @@ def upload_file_by_block(request):
         })
 
 
+@csrf_exempt
+def upload_file_by_breakpoint(request):
+    if request.method == 'POST':
+        print(request.POST)
+        file = request.FILES['file']
+        file_name = request.POST.get('filename')
+        chunk_size = request.POST.get('chunkSize')
+        save_dir = os.path.join(BASE_DIR, 'static', 'uploadfiles', 'save', 'files')
+        content_range = request.headers.get('Content-Range')
+        print('content_range:', content_range)
+
+        # 检查并创建保存文件的目录
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+
+        if content_range:
+            start, end, total = parse_content_range_header(content_range)
+            temp_file_path = os.path.join(save_dir, f'{file_name}')
+            # 根据起始位置和文件大小，将文件写入指定位置
+            with open(temp_file_path, 'ab') as destination:
+                destination.seek(start)
+                destination.write(file.read())
+            if end == total:
+                # 文件上传完成
+                return JsonResponse({
+                    'code': 200,
+                    'msg': '文件全部上传成功',
+                    'data': None,
+                    'success': True
+                })
+            else:
+                if total - start < int(chunk_size):
+                    next_start = start + 1
+                    j_res = JsonResponse({
+                        'code': 308,
+                        'msg': '文件部分上传成功',
+                        'data': None,
+                        'success': True,
+                    })
+                    j_res.headers['Range'] = f'bytes={next_start}-{total}'
+                    return j_res
+                # 返回部分内容的响应，包括下一块的起始位置
+                next_start = end + 1
+                j_res = JsonResponse({
+                    'code': 308,
+                    'msg': '文件部分上传成功',
+                    'data': None,
+                    'success': True,
+                })
+                j_res.headers['Range'] = f'bytes={next_start}-{next_start + int(chunk_size)}'
+                return j_res
+        else:
+            # 非断点续传请求，直接保存文件
+            with open(save_dir, 'wb') as destination:
+                destination.write(file.read())
+            return JsonResponse({
+                'code': 200,
+                'msg': '文件上传成功',
+                'data': None,
+                'success': True
+            })
+    else:
+        return JsonResponse({
+            'code': 405,
+            'msg': '请求方式错误',
+            'data': None,
+            'success': False
+        })
+
+
+def parse_content_range_header(content_range):
+    range_str, total_str = content_range.split('/')
+    start, end = range_str.split(' ')[1].split('-')
+    return int(start), int(end), int(total_str)
+
+
 if '__main__' == __name__:
     create_test_data()

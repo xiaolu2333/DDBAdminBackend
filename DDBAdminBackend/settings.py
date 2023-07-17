@@ -144,7 +144,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # 允许跨域
 CORS_ORIGIN_ALLOW_ALL = True  # 允许所有域名跨域
 CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
-CORS_ORIGIN_WHITELIST = ()  # 允许跨域的域名
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:5173',
+)  # 允许跨域的域名
 CORS_ALLOW_METHODS = (  # 允许的请求方法
     'GET',
     'POST',
@@ -166,6 +168,16 @@ CORS_ALLOW_HEADERS = (
     'x-csrftoken',
     'X_FILENAME',
     'XMLHttpRequest',
+    'content-range',
+    'range',
+)
+# 允许的响应头
+CORS_EXPOSE_HEADERS = (
+    'range',
+    'content-range',
+    'content-length',
+    'content-type',
+    'content-disposition',
 )
 
 # 文件上传大小限制

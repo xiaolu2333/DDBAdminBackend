@@ -22,6 +22,8 @@ urlpatterns = [
     # 表单文件上传与下载
     path('upload_form_file', views.upload_form_file, name='upload_form_file'),
     path('download_form_file', views.download_form_file, name='download_form_file'),
+    # 文件断点续传
+    path('upload_file_by_breakpoint', views.upload_file_by_breakpoint, name='upload_file_by_breakpoint'),
     # 文件分片上传
     path('upload_file_by_block', views.upload_file_by_block, name='upload_file_by_breakpoint'),
 ]
