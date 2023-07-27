@@ -10,10 +10,6 @@ class Role(models.Model):
     id = models.AutoField(primary_key=True)
     # 角色名
     name = models.CharField(max_length=255)
-    # 菜单权限
-    menu = models.CharField(max_length=255)
-    # 按钮权限
-    button = models.CharField(max_length=255)
     # 角色描述
     desc = models.CharField(max_length=255)
     # 创建时间
@@ -39,8 +35,6 @@ class User(models.Model):
     password = models.CharField(max_length=255)
     # 用户所属部门
     dept = models.ForeignKey(Department, on_delete=models.CASCADE)
-    # 用户所属组织
-    org = models.ForeignKey(Organization, on_delete=models.CASCADE)
     # 用户角色
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
     # 是否启用

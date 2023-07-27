@@ -6,11 +6,13 @@ def test_0():
     user_info_list = []
 
     # 500000条数据为 69948 KB
-    for i in range(5000000):
+    # 1000000条数据为 140002 KB
+    # 5000000条数据为 704359 KB
+    for i in range(1000000):
         user_name = faker.name()
         # 用用户名的拼音作为 user_code
         user_code = "code_" + str(i)
-        password = faker.password(length=10, special_chars=True, digits=True, upper_case=True, lower_case=True)
+        # password = faker.password(length=10, special_chars=True, digits=True, upper_case=True, lower_case=True)
         # 随机从 绝密、机密、秘密、内部、公开 中选一个
         secret_level = faker.random_element(elements=('绝密', '机密', '秘密', '内部', '公开'))
         # 随机生成 True 或 False
@@ -23,7 +25,7 @@ def test_0():
             {
                 "username": user_name,
                 "usercode": user_code,
-                "password": password,
+                # "password": password,
                 "secretlevel": secret_level,
                 "enabled": enabled,
                 "sortNum": sortNum,
@@ -35,8 +37,10 @@ def test_0():
 
     # 将数据写入到CSV文件中
     import csv
-    with open('user_info.csv', 'w', newline='', encoding='utf-8') as f:
-        fieldnames = ['username', 'usercode', 'password', 'secretlevel', 'enabled',
+    with open('user_info_big.csv', 'w', newline='', encoding='utf-8') as f:
+        fieldnames = ['username', 'usercode',
+                      # 'password',
+                      'secretlevel', 'enabled',
                       'sortNum', 'remark', 'create_time', 'update_time']
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()

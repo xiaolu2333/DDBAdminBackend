@@ -459,7 +459,6 @@ def upload_file_by_block(request):
 @csrf_exempt
 def upload_file_by_breakpoint(request):
     if request.method == 'POST':
-        print(request.POST)
         file = request.FILES['file']
         file_name = request.POST.get('filename')
         chunk_size = request.POST.get('chunkSize')
