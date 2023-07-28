@@ -1,3 +1,4 @@
+import datetime
 import json
 
 from django.core.paginator import Paginator
@@ -135,6 +136,10 @@ def update_organization(request):
         if id is not None:
             # 将 data.parentCode 转换为 parent_code
             data['parent_code'] = data.pop('parentCode')
+            data['create_time'] = data.pop('createTime')
+            data['update_time'] = datetime.datetime.now()
+            data.pop('updateTime')
+
             try:
                 # 更新数据
                 Organization.objects.filter(id=id).update(**data)

@@ -7,8 +7,6 @@ from framework.authentication.models import Role
 class Menu(models.Model):
     # 菜单名
     name = models.CharField(max_length=32, null=False)
-    # 菜单链接
-    url = models.CharField(max_length=32, null=False)
     # 父级菜单
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=False)
     # 页面类型
@@ -20,15 +18,13 @@ class Menu(models.Model):
     # 路由路径
     path = models.CharField(max_length=255, null=False)
     # 页面路径
-    component_path = models.CharField(max_length=255, null=False)
+    component = models.CharField(max_length=255, null=False)
     # 图标
     icon = models.CharField(max_length=255, null=False)
     # 是否启用
     enable = models.BooleanField(default=True)
     # 排序
     sort = models.IntegerField(default=0)
-    # 菜单组件
-    component = models.CharField(max_length=255, null=False)
     # 分配给角色
     role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='role_menus', null=True, blank=True)
     # 创建人

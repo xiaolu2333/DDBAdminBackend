@@ -23,6 +23,12 @@ urlpatterns = [
         include(('framework.departments.urls', 'framework.departments'), namespace='framework-departments')
     ),
 
+    # 系统管理——菜单管理
+    path(
+        'framework/resources/',
+        include(('framework.resources.urls', 'framework.resources'), namespace='framework-resources')
+    ),
+
     # 学习测试应用
     path('test_app/', include(('test_app.urls', 'test_app'), namespace='test_app')),
 
