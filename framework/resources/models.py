@@ -8,7 +8,7 @@ class Menu(models.Model):
     # 菜单名
     name = models.CharField(max_length=32, null=False)
     # 父级菜单
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=False)
+    parent_id = models.IntegerField(null=False, default=0)
     # 页面类型
     page_type = models.IntegerField(null=False)  # 1-主目录/模块 2-路由
     # 菜单类型
@@ -23,6 +23,8 @@ class Menu(models.Model):
     icon = models.CharField(max_length=255, null=False)
     # 是否启用
     enable = models.BooleanField(default=True)
+    # 是否隐藏
+    hidden = models.BooleanField(default=False)
     # 排序
     sort = models.IntegerField(default=0)
     # 分配给角色

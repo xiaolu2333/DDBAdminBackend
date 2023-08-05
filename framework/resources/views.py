@@ -31,6 +31,7 @@ def get_menu_list(request):
                     'authType': i.auth_type,
                     'component': i.component,
                     'icon': i.icon,
+                    'parentId': i.parent_id,
                     'enable': i.enable,
                     'sort': i.sort,
                     'createTime': i.create_time,
