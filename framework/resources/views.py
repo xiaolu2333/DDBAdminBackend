@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from framework.resources.models import Menu
+from utils.formatTransformer.request_and_response import snake_to_camel, camel_to_snake
 
 
 def get_menu_list(request):
@@ -36,9 +37,10 @@ def get_menu_list(request):
                     'sort': i.sort,
                     'createTime': i.create_time,
                     'updateTime': i.update_time,
+                    'children': [],
                 }
                 return_data.append(item)
-                print('return_data:', return_data)
+            print('return_data:', return_data)
             return JsonResponse({
                 'code': 200,
                 'msg': 'success',
@@ -60,19 +62,17 @@ def get_menu_list(request):
 
 def get_menu_detail(request):
     # 获取路径参数 id
-    id = request.GET.get('id', None)
-    if id is not None:
+    _id = request.GET.get('id', None)
+    if _id is not None:
         # 获取指定 id 的数据
-        query_data = Menu.objects.filter(id=id).values()[0]
-        return_data = {
-            'id': query_data['id'],
-            'name': query_data['name'],
-            'code': query_data['code'],
-            'parentCode': query_data['parent_code'],
-            'enabled': query_data['enabled'],
-            'createTime': query_data['create_time'],
-            'updateTime': query_data['update_time'],
-        }
+        query_data = Menu.objects.filter(id=_id).values()[0]
+
+        # 将 query_data 的属性转为驼峰命名，并构造返回数据
+        return_data = {}
+        for k, v in query_data.items():
+            # 将k转为驼峰命名
+            key_name = snake_to_camel(k)
+            return_data[key_name] = v
 
         return JsonResponse({
             'code': 200,
@@ -97,16 +97,24 @@ def create_menu(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
         print('data:', data)
-        # 将 data.parentCode 转换为 parent_code
-        data['parent_code'] = data.pop('parentCode')
+        data['createTime'] = datetime.datetime.now()
+        data['updateTime'] = datetime.datetime.now()
+        new_data = {}
+
+        for k, v in data.items():
+            # 将k转为驼峰命名
+            key_name = camel_to_snake(k)
+            new_data[key_name] = v
+
+        print('new_data after transform:', new_data)
         try:
             # 将数据插入到数据库
-            Menu.objects.create(**data)
+            Menu.objects.create(**new_data)
 
             return JsonResponse({
                 'code': 200,
                 'msg': 'success',
-                'data': data
+                'data': new_data
             })
         except Exception as e:
             return JsonResponse({
@@ -144,15 +152,19 @@ def update_menu(request):
         # 获取 id
         id = data.get('id', None)
         if id is not None:
-            # 将 data.parentCode 转换为 parent_code
-            data['parent_code'] = data.pop('parentCode')
-            data['create_time'] = data.pop('createTime')
-            data['update_time'] = datetime.datetime.now()
-            data.pop('updateTime')
+            data['updateTime'] = datetime.datetime.now()
+            new_data = {}
+
+            for k, v in data.items():
+                # 将k转为驼峰命名
+                key_name = camel_to_snake(k)
+                new_data[key_name] = v
+
+            print('new_data after transform:', new_data)
 
             try:
                 # 更新数据
-                Menu.objects.filter(id=id).update(**data)
+                Menu.objects.filter(id=id).update(**new_data)
                 return JsonResponse({
                     'code': 200,
                     'msg': 'success',
