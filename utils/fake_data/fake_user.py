@@ -8,10 +8,51 @@ def test_0():
     # 500000条数据为 69948 KB
     # 1000000条数据为 140002 KB
     # 5000000条数据为 704359 KB
-    for i in range(1000000):
+    for i in range(100):
         user_name = faker.name()
         # 用用户名的拼音作为 user_code
         user_code = "code_" + str(i)
+        sex = faker.random_element(elements=('男', '女'))
+        age = faker.random_int(min=1, max=100)
+        email = faker.email()
+        phone = faker.phone_number()
+        is_staff = faker.boolean(chance_of_getting_true=50)
+        is_superuser = faker.boolean(chance_of_getting_true=50)
+        is_active = faker.boolean(chance_of_getting_true=50)
+        last_login = faker.date_time_between(start_date='-1y', end_date='now')
+        groups = faker.random_int(min=1, max=100)
+        user_permissions = faker.random_int(min=1, max=100)
+        typing_extensions = faker.random_int(min=1, max=100)
+        address = faker.address()
+        nikename1 = faker.name()
+        nikename2 = faker.name()
+        nikename3 = faker.name()
+        nikename4 = faker.name()
+        nikename5 = faker.name()
+        nikename6 = faker.name()
+        nikename7 = faker.name()
+        nikename8 = faker.name()
+        nikename9 = faker.name()
+        nikename10 = faker.name()
+        job = faker.job()
+        work_address = faker.address()
+        work_phone = faker.phone_number()
+        work_email = faker.email()
+        work_postcode = faker.postcode()
+        work_fax = faker.phone_number()
+        work_remark = faker.text(max_nb_chars=20)
+        home_address = faker.address()
+        home_phone = faker.phone_number()
+        home_email = faker.email()
+        home_postcode = faker.postcode()
+        home_fax = faker.phone_number()
+        home_remark = faker.text(max_nb_chars=20)
+        school = faker.company()
+        major = faker.job()
+        education = faker.random_element(elements=('博士', '硕士', '本科', '大专', '高中', '初中', '小学'))
+        graduation_time = faker.date_time_between(start_date='-1y', end_date='now')
+        work_experience = faker.text(max_nb_chars=20)
+        family_info = faker.text(max_nb_chars=20)
         # password = faker.password(length=10, special_chars=True, digits=True, upper_case=True, lower_case=True)
         # 随机从 绝密、机密、秘密、内部、公开 中选一个
         secret_level = faker.random_element(elements=('绝密', '机密', '秘密', '内部', '公开'))
@@ -23,25 +64,113 @@ def test_0():
         update_time = faker.date_time_between(start_date='-1y', end_date='now')
         user_info_list.append(
             {
-                "username": user_name,
+                "用户名": user_name,
                 "usercode": user_code,
-                # "password": password,
+                "sex": sex,
+                "age": age,
+                "email": email,
+                "phone": phone,
+                "is_staff": is_staff,
+                "is_superuser": is_superuser,
+                "is_active": is_active,
+                "last_login": last_login,
+                "groups": groups,
+                "user_permissions": user_permissions,
+                "typing_extensions": typing_extensions,
+                "address": address,
+                "nikename1": nikename1,
+                "nikename2": nikename2,
+                "nikename3": nikename3,
+                "nikename4": nikename4,
+                "nikename5": nikename5,
+                "nikename6": nikename6,
+                "nikename7": nikename7,
+                "nikename8": nikename8,
+                "nikename9": nikename9,
+                "nikename10": nikename10,
+                "job": job,
+                "work_address": work_address,
+                "work_phone": work_phone,
+                "work_email": work_email,
+                "work_postcode": work_postcode,
+                "work_fax": work_fax,
+                "work_remark": work_remark,
+                "home_address": home_address,
+                "home_phone": home_phone,
+                "home_email": home_email,
+                "home_postcode": home_postcode,
+                "home_fax": home_fax,
+                "home_remark": home_remark,
+                "school": school,
+                "major": major,
+                "education": education,
+                "graduation_time": graduation_time,
+                "work_experience": work_experience,
+                "family_info": family_info,
                 "secretlevel": secret_level,
                 "enabled": enabled,
                 "sortNum": sortNum,
                 "remark": remark,
                 "create_time": create_time,
                 "update_time": update_time,
+
             }
         )
 
     # 将数据写入到CSV文件中
     import csv
-    with open('user_info_big.csv', 'w', newline='', encoding='utf-8') as f:
-        fieldnames = ['username', 'usercode',
-                      # 'password',
-                      'secretlevel', 'enabled',
-                      'sortNum', 'remark', 'create_time', 'update_time']
+    with open('user_info_mini_chinese.csv', 'w', newline='', encoding='utf-8') as f:
+        fieldnames = ['用户名',
+                      'usercode',
+                      "sex",
+                      "age",
+                      "email",
+                      "phone",
+                      "is_staff",
+                      "is_superuser",
+                      "is_active",
+                      "last_login",
+                      "groups",
+                      "user_permissions",
+                      "typing_extensions",
+                      "address",
+                      "nikename1",
+                      "nikename2",
+                      "nikename3",
+                      "nikename4",
+                      "nikename5",
+                      "nikename6",
+                      "nikename7",
+                      "nikename8",
+                      "nikename9",
+                      "nikename10",
+                      "job",
+                      "work_address",
+                      "work_phone",
+                      "work_email",
+                      "work_postcode",
+                      "work_fax",
+                      "work_remark",
+                      "home_address",
+                      "home_phone",
+                      "home_email",
+                      "home_postcode",
+                      "home_fax",
+                      "home_remark",
+                      "school",
+                      "major",
+                      "education",
+                      "graduation_time",
+                      "work_experience",
+                      "family_info",
+                      "secretlevel",
+                      "enabled",
+                      "sortNum",
+                      "remark",
+                      "create_time",
+                      "update_time",
+                      ]
+
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(user_info_list)

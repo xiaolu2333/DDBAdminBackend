@@ -183,3 +183,6 @@ CORS_EXPOSE_HEADERS = (
 # 文件上传大小限制
 DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 1024  # 1G
 FILE_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 1024  # 1G
+
+# # 自定义用户模型
+# AUTH_USER_MODEL = 'authentication.CustomUser'
