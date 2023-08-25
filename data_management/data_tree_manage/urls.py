@@ -7,6 +7,9 @@ api_version = 'v1'
 urlpatterns = [
     path('index/', views.index, name='index'),
 
+    # 获取树节点
+    path('get_tree_node/', views.get_tree_node, name='get_tree_node'),
+
     # 创建树节点
     path('create_tree_node/', views.create_tree_node, name='create_tree_node')
 ]
