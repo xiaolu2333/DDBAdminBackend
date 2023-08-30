@@ -45,6 +45,17 @@ def get_tree_node(request):
     """
     # 获取请求参数
     oid = request.GET.get('oid', None)
+
+    # # 返回 响应状态码 500，响应消息 error，响应数据 请求参数错误
+    # if oid is None:
+    #     return JsonResponse({
+    #         'msg': '请求参数错误',
+    #     }, status=500)
+    # else:
+    #     return JsonResponse({
+    #         'msg': '请求参数错误',
+    #     }, status=500)
+
     if oid is None:
         return JsonResponse({
             'code': 500,
@@ -54,10 +65,10 @@ def get_tree_node(request):
     else:
         nodes = DataTreeNode.objects.filter(parent_oid=oid)
         # 根据nodes中数据的parent_code构建树形结构
-        list = []
+        _list = []
         # 为nodes中数据添加children属性
         for i in nodes:
-            list.append({
+            _list.append({
                 'oid': i.oid,
                 'nodeType': i.node_type,
                 'name': i.name,
@@ -65,11 +76,11 @@ def get_tree_node(request):
                 'children': []
             })
 
-        print('list:', list)
+        print('_list:', _list)
         return JsonResponse({
             'code': 200,
             'msg': 'success',
-            'data': list,
+            'data': _list,
         })
 
 
