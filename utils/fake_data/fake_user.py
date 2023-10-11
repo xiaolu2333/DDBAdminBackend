@@ -6,9 +6,8 @@ def test_0():
     user_info_list = []
 
     # 500000条数据为 69948 KB
-    # 1000000条数据为 140002 KB
-    # 5000000条数据为 704359 KB
-    for i in range(100):
+    # 2000000条数据为 1.57 GB
+    for i in range(300000):
         user_name = faker.name()
         # 用用户名的拼音作为 user_code
         user_code = "code_" + str(i)
@@ -119,7 +118,7 @@ def test_0():
 
     # 将数据写入到CSV文件中
     import csv
-    with open('user_info_mini_chinese.csv', 'w', newline='', encoding='utf-8') as f:
+    with open('user_info_big.csv', 'w', newline='', encoding='utf-8') as f:
         fieldnames = ['用户名',
                       'usercode',
                       "sex",
