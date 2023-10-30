@@ -1,5 +1,6 @@
 import json
 import os
+import random
 
 from django.core.files.base import ContentFile
 from django.core.paginator import Paginator
@@ -301,20 +302,20 @@ def download_file_by_stream(request):
         except FileNotFoundError:
             return JsonResponse({
                 'code': 500,
-                'msg': 'error',
-                'data': '文件不存在',
+                'msg': '文件不存在',
+                'data': None,
             })
         except Exception:
             return JsonResponse({
                 'code': 500,
-                'msg': 'error',
-                'data': '下载失败',
+                'msg': '下载失败',
+                'data': None,
             })
     else:
         return JsonResponse({
             'code': 500,
-            'msg': 'error',
-            'data': '请求方式错误',
+            'msg': '请求方式错误',
+            'data': None,
         })
 
 
@@ -529,6 +530,54 @@ def parse_content_range_header(content_range):
     range_str, total_str = content_range.split('/')
     start, end = range_str.split(' ')[1].split('-')
     return int(start), int(end), int(total_str)
+
+
+@csrf_exempt
+def aircraft_data(request):
+    if request.method == 'POST':
+        # 仿真
+        emulation = request.POST.get('emulation', None)
+        # 轮次
+        _round = request.POST.get('round', None)
+        # 绘制项
+        drawItem = request.POST.get('drawItem', None)
+
+        # 50个时间
+        import datetime
+
+        # 创建一个空列表来存储时间点
+        x_data = []
+
+        # Get the current time
+        current_time = datetime.datetime.now()
+
+        # Generate 50 time points
+        for i in range(50):
+            time_formatted = current_time.strftime("%H:%M:%S")
+            x_data.append(time_formatted)
+            current_time += datetime.timedelta(minutes=1)
+
+        # 打印生成的时间点
+        for time_point in x_data:
+            print(time_point)
+
+        y_data = [random.randint(0, 100) for _ in range(50)]
+        return JsonResponse({
+            'code': 200,
+            'msg': 'success',
+            'data': {
+                'xData': x_data,
+                'yData': y_data,
+            },
+            'success': True
+        })
+    else:
+        return JsonResponse({
+            'code': 405,
+            'msg': '请求方式错误',
+            'data': None,
+            'success': False
+        })
 
 
 if '__main__' == __name__:
