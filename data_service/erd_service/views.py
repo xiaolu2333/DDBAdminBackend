@@ -48,9 +48,18 @@ def get_erd_data(request):
     data['nodeDataArray'] = [Record1, Record2, Record3]
 
     link_data = [
-        {"from": "Record1", "fromPort": "fieldThree", "to": "Record2", "toPort": "fieldA"},
-        {"from": "Record1", "fromPort": "field2", "to": "Record3", "toPort": "fieldD"},
-        {"from": "Record4", "fromPort": "fieRecord4-1111111111111111", "to": "Record3", "toPort": "fieldB"}
+        # {
+        #     "fromSchema": "public", "from": "Record1", "fromPort": "fieldThree", "fromText": "1",
+        #     "toSchema": "public", "to": "Record2", "toPort": "fieldA", "toText": "M"
+        # },
+        # {
+        #     "fromSchema": "public", "from": "Record1", "fromPort": "field2", "fromText": "M",
+        #     "toSchema": "public", "to": "Record3", "toPort": "fieldD", "toText": "M"
+        # },
+        # {
+        #     "fromSchema": "public", "from": "Record4", "fromPort": "fieRecord4-1111111111111111",
+        #     "toSchema": "public", "to": "Record3", "toPort": "fieldB"
+        # }
     ]
     data['linkDataArray'] = link_data
 
