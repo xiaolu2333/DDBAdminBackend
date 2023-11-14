@@ -22,7 +22,8 @@ def get_erd_data(request):
             {"name": "field2", "info": "boolean", "color": "#F25022", "figure": "Ellipse", 'icon': '外键'},
             {"name": "fieldThree", "info": "inet", "color": "#00BCF2", 'icon': '外键'},
         ],
-        "loc": "0 0"
+        "loc": "0 0",
+        "clickCount": 0,
     }
     Record2 = {
         "schema": "public",
@@ -33,7 +34,8 @@ def get_erd_data(request):
             {"name": "fieldC", "info": "char var", "color": "#7FBA00", "figure": "Diamond", 'icon': '字段'},
             {"name": "fieldD", "info": "char var", "color": "#00BCF2", "figure": "Rectangle", 'icon': '字段'}
         ],
-        "loc": "280 0"
+        "loc": "280 0",
+        "clickCount": 0,
     }
     Record3 = {
         "schema": "public",
@@ -43,23 +45,24 @@ def get_erd_data(request):
             {"name": "fieldB", "info": "char var", "color": "#F25022", "figure": "Rectangle", 'icon': '字段'},
             {"name": "fieldD", "info": "real", "color": "#00BCF2", "figure": "Rectangle", 'icon': '字段'}
         ],
-        "loc": "280 0"
+        "loc": "280 0",
+        "clickCount": 0,
     }
     data['nodeDataArray'] = [Record1, Record2, Record3]
 
     link_data = [
-        # {
-        #     "fromSchema": "public", "from": "Record1", "fromPort": "fieldThree", "fromText": "1",
-        #     "toSchema": "public", "to": "Record2", "toPort": "fieldA", "toText": "M"
-        # },
-        # {
-        #     "fromSchema": "public", "from": "Record1", "fromPort": "field2", "fromText": "M",
-        #     "toSchema": "public", "to": "Record3", "toPort": "fieldD", "toText": "M"
-        # },
-        # {
-        #     "fromSchema": "public", "from": "Record4", "fromPort": "fieRecord4-1111111111111111",
-        #     "toSchema": "public", "to": "Record3", "toPort": "fieldB"
-        # }
+        {
+            "fromSchema": "public", "from": "Record1", "fromPort": "fieldThree", "fromText": "1",
+            "toSchema": "public", "to": "Record2", "toPort": "fieldA", "toText": "M"
+        },
+        {
+            "fromSchema": "public", "from": "Record1", "fromPort": "field2", "fromText": "M",
+            "toSchema": "public", "to": "Record3", "toPort": "fieldD", "toText": "M"
+        },
+        {
+            "fromSchema": "public", "from": "Record4", "fromPort": "fieRecord4-1111111111111111",
+            "toSchema": "public", "to": "Record3", "toPort": "fieldB"
+        }
     ]
     data['linkDataArray'] = link_data
 
