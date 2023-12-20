@@ -5,6 +5,9 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
 
+    # 系统管理——登录
+    path('framework/login/', include(('framework.login.urls', 'framework.login'), namespace='framework-login')),
+
     # 系统管理——用户、角色、权限管理
     path(
         'framework/authentication',
@@ -29,9 +32,6 @@ urlpatterns = [
         include(('framework.resources.urls', 'framework.resources'), namespace='framework-resources')
     ),
 
-    # 学习测试应用
-    path('test_app/', include(('test_app.urls', 'test_app'), namespace='test_app')),
-
     # 数据管理——数据树管理
     path('data_management/data_tree_manage/',
          include(('data_management.data_tree_manage.urls', 'data_management.data_tree_manage'),
@@ -40,4 +40,7 @@ urlpatterns = [
     # 数据服务——erd服务
     path('data_service/erd_service/',
          include(('data_service.erd_service.urls', 'data_service.erd_service'), namespace='erd_service')),
+
+    # 学习测试应用
+    path('test_app/', include(('test_app.urls', 'test_app'), namespace='test_app')),
 ]

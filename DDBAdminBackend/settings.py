@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from Crypto import Random
+from Crypto.PublicKey import RSA
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -187,3 +189,34 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 1024  # 1G
 
 # # 自定义用户模型
 # AUTH_USER_MODEL = 'authentication.CustomUser'
+
+# from cryptography.hazmat.primitives import serialization
+# from cryptography.hazmat.primitives.asymmetric import rsa
+#
+# # 生成RSA密钥对
+# PRIVATE_KEY = rsa.generate_private_key(
+#     public_exponent=65537,
+#     key_size=2048,
+# )
+#
+# # 获取私钥的PEM格式
+# private_pem = PRIVATE_KEY.private_bytes(
+#     encoding=serialization.Encoding.PEM,
+#     format=serialization.PrivateFormat.PKCS8,
+#     encryption_algorithm=serialization.NoEncryption()
+# )
+#
+# # 将私钥保存到文件
+# with open('private_key.pem', 'wb') as f:
+#     f.write(private_pem)
+#
+# # 获取公钥的PEM格式
+# PUBLIC_KEY = PRIVATE_KEY.public_key()
+# public_pem = PUBLIC_KEY.public_bytes(
+#     encoding=serialization.Encoding.PEM,
+#     format=serialization.PublicFormat.SubjectPublicKeyInfo
+# )
+#
+# # 将公钥保存到文件
+# with open('public_key.pem', 'wb') as f:
+#     f.write(public_pem)

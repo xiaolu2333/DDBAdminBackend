@@ -1,6 +1,7 @@
 import json
 import os
 import random
+import time
 
 from django.core.files.base import ContentFile
 from django.core.paginator import Paginator
@@ -577,6 +578,43 @@ def aircraft_data(request):
             'msg': '请求方式错误',
             'data': None,
             'success': False
+        })
+
+
+@csrf_exempt
+def interrupt_upload_request(request):
+    """
+    中断文件上传
+    :param request:
+    :return:
+    """
+    if request.method == 'POST':
+        r = request
+        # 获取POST请求中的数据
+        post_data = request.POST
+        files_data = request.FILES
+
+        # 获取名字
+        name = post_data.get('name', None)
+        # 获取描述
+        description = post_data.get('description', None)
+
+        # 获取方案文件对象
+        schemeFile = files_data.get('schemeFile', None)
+        # 获取数据文件对象
+        dataFiles = files_data.get('dataFiles', None)
+
+        time.sleep(4)
+        return JsonResponse({
+            'code': 200,
+            'msg': 'success',
+            'data': '上传成功',
+        })
+    else:
+        return JsonResponse({
+            'code': 500,
+            'msg': 'error',
+            'data': '请求方式错误',
         })
 
 
