@@ -604,17 +604,26 @@ def interrupt_upload_request(request):
         # 获取数据文件对象
         dataFiles = files_data.get('dataFiles', None)
 
-        time.sleep(4)
+        # 保存文件
+        # 方案文件保存路径
+        scheme_file_path = os.path.join(BASE_DIR, 'static/uploadfiles/save/files', schemeFile.name)
+        # 保存文件
+        with open(scheme_file_path, 'wb') as f:
+            for chunk in schemeFile.chunks():
+                f.write(chunk)
+
         return JsonResponse({
             'code': 200,
-            'msg': 'success',
-            'data': '上传成功',
+            'data': None,
+            'msg': '上传成功',
+            'success': True
         })
     else:
         return JsonResponse({
             'code': 500,
-            'msg': 'error',
-            'data': '请求方式错误',
+            'data': None,
+            'msg': '请求方式错误',
+            'success': False
         })
 
 
