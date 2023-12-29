@@ -28,6 +28,8 @@ urlpatterns = [
     path('upload_file_by_block', views.upload_file_by_block, name='upload_file_by_breakpoint'),
     # 中断文件上传
     path('interrupt_upload_request', views.interrupt_upload_request, name='interrupt_upload_request'),
+    # 中断文件下载
+    path('interrupt_download_request', views.interrupt_download_request, name='interrupt_download_request'),
 
     # visual数据可视化
     path('visual_data/aircraft_data', views.aircraft_data, name='aircraft_data'),

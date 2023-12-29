@@ -627,5 +627,38 @@ def interrupt_upload_request(request):
         })
 
 
+def interrupt_download_request(request):
+    """
+    中断文件下载
+    :param request:
+    :return:
+    """
+    if request.method == 'GET':
+        filename = 'user_info_big.csv'
+        try:
+            path = os.path.join(BASE_DIR, 'static', 'uploadfiles', filename)
+            file = open(path, 'rb')
+            # 构造 response
+            response = FileResponse(file)
+            # 增加headers
+            response['Content-Type'] = 'application/octet-stream'  # 告诉浏览器这是一个二进制文件
+            # response['Content-Length'] =   # 告诉浏览器文件长度
+            response['Access-Control-Expose-Headers'] = "Content-Disposition, Content-Type"  # 允许浏览器访问的headers
+            response['Content-Disposition'] = "attachment; filename={}".format(escape_uri_path(filename))  # 下载文件的名称
+            return response
+        except FileNotFoundError:
+            return JsonResponse({
+                'code': 500,
+                'msg': '文件不存在',
+                'data': None,
+            })
+        except Exception:
+            return JsonResponse({
+                'code': 500,
+                'msg': '下载失败',
+                'data': None,
+            })
+
+
 if '__main__' == __name__:
     create_test_data()
