@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'data_management.data_tree_manage',
     'data_management.database_manage',
     'data_service.erd_service',
+    'learn',
 
     'corsheaders',
 ]

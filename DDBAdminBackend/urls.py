@@ -43,4 +43,7 @@ urlpatterns = [
 
     # 学习测试应用
     path('test_app/', include(('test_app.urls', 'test_app'), namespace='test_app')),
+
+    # 学习
+    path('learn/', include(('learn.urls', 'learn'), namespace='learn')),
 ]

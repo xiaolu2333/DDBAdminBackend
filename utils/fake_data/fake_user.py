@@ -1,6 +1,7 @@
 from faker import Faker
 
 
+# 将数据写入到CSV文件中
 def test_0():
     faker = Faker(locale='zh_CN')
     user_info_list = []
@@ -196,6 +197,45 @@ def test_1():
     return data_list
 
 
+# 将数据写入到Excel文件中
+def test_2():
+    faker = Faker(locale='zh_CN')
+    user_info = {
+        'user_name': [],
+        'user_code': [],
+        'sex': [],
+        'age':[],
+        'email': [],
+        'phone': [],
+        'is_staff': [],
+    }
+
+    # 300000条数据为 14366 KB
+    # 1000000条数据为  KB
+    for i in range(1000000):
+        user_name = faker.name()
+        # 用用户名的拼音作为 user_code
+        user_code = "code_" + str(i)
+        sex = faker.random_element(elements=('男', '女'))
+        age = faker.random_int(min=1, max=100)
+        email = faker.email()
+        phone = faker.phone_number()
+        is_staff = faker.boolean(chance_of_getting_true=50)
+        user_info['user_name'].append(user_name)
+        user_info['user_code'].append(user_code)
+        user_info['sex'].append(sex)
+        user_info['age'].append(age)
+        user_info['email'].append(email)
+        user_info['phone'].append(phone)
+        user_info['is_staff'].append(is_staff)
+
+    # 使用pandas 将数据写入到 Excel 文件中
+    import pandas as pd
+    df = pd.DataFrame(user_info)
+    df.to_excel('user_info.xlsx', index=False)
+
+
 if __name__ == '__main__':
-    test_0()
+    # test_0()
     # test_1()
+    test_2()
