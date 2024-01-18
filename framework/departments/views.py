@@ -35,6 +35,7 @@ def get_department_list(request):
                         'updateTime': query_data[i].update_time,
                         'org': query_data[i].org_id.id,
                         # 'data': DjangoJSONEncoder().encode(model_to_dict(org)),
+                        'children': [],
                     }
                     return_data.append(item)
 
