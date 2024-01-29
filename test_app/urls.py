@@ -33,4 +33,7 @@ urlpatterns = [
 
     # visual数据可视化
     path('visual_data/aircraft_data', views.aircraft_data, name='aircraft_data'),
+
+    # 前端埋点数据分析
+    path('page_data_analysis', views.page_data_analysis, name='page_data_analysis'),
 ]

@@ -660,5 +660,17 @@ def interrupt_download_request(request):
             })
 
 
+@csrf_exempt
+def page_data_analysis(request):
+    analytics_ata = json.loads(request.body.decode('utf-8'))
+    print('analytics_ata:', analytics_ata)
+
+    return JsonResponse({
+        'code': 200,
+        'msg': None,
+        'data': None,
+    })
+
+
 if '__main__' == __name__:
     create_test_data()
