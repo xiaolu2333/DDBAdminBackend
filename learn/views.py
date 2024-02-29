@@ -1,7 +1,11 @@
 import json
+import os
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from DDBAdminBackend.settings import BASE_DIR
+
+from learn.utils import parse_content_range_header
 
 
 ###################################### element plus 相关 ######################################
@@ -209,3 +213,67 @@ def get_general_table_data(request):
             'msg': '获取数据成功！',
             'data': response_data,
         }, safe=False)
+
+
+###################################### 前后端数据交互 ######################################
+# 大文件分片上传
+@csrf_exempt
+def upload_big_file_slice(request):
+    if request.method == 'POST':
+        file = request.FILES['file']
+
+        start = request.POST.get('start')
+        end = request.POST.get('end')
+        total = request.POST.get('size')
+        index = request.POST.get('index')
+        file = request.FILES.get('file')
+        hash_value = request.POST.get('hash')
+        file_name = request.POST.get('fileName')
+
+        save_dir = os.path.join(BASE_DIR, 'static', 'uploadFiles', 'temp', 'files', f'{file_name.split(".")[0]}')
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+        with open(os.path.join(save_dir, f'{hash_value}-----{index}.part'), 'wb') as f:
+            f.write(file.read())
+        return JsonResponse({
+            'code': 200,
+            'status': 'success',
+            'msg': '分片上传成功',
+            'data': {
+                'start': start,
+                'end': end,
+                'total': total,
+                'index': index,
+                'hash': hash_value,
+                'fileName': file_name
+            }
+        })
+    else:
+        return JsonResponse({
+            'code': 405,
+            'msg': '请求方式错误',
+            'data': None,
+            'success': False
+        })
+
+
+###################################### http 请求相关 ######################################
+def test_repeat_request(request):
+    """
+    测试重复请求
+    :param request:
+    :return:
+    """
+    if request.method == 'GET':
+        return JsonResponse({
+            'code': 200,
+            'status': 'success',
+            'msg': '获取数据成功！',
+            'data': 'success',
+        }, safe=False)
+    else:
+        return JsonResponse({
+            'code': 500,
+            'msg': 'error',
+            'data': '请求方式错误',
+        })
