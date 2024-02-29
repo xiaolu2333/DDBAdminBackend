@@ -26,6 +26,8 @@ urlpatterns = [
     ################################# 前后端数据交互 #################################
     # 大文件分片上传
     path('data_interaction/upload_big_file_slice', views.upload_big_file_slice, name='upload_big_file'),
+    # 合并大文件分片
+    path('data_interaction/merge_big_file_slice', views.merge_big_file_slice, name='merge_big_file_slice'),
 
     ################################# http 请求相关 #################################
     # 重复请求

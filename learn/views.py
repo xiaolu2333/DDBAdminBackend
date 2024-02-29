@@ -5,8 +5,6 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from DDBAdminBackend.settings import BASE_DIR
 
-from learn.utils import parse_content_range_header
-
 
 ###################################### element plus 相关 ######################################
 @csrf_exempt
@@ -245,6 +243,50 @@ def upload_big_file_slice(request):
                 'total': total,
                 'index': index,
                 'hash': hash_value,
+                'fileName': file_name
+            }
+        })
+    else:
+        return JsonResponse({
+            'code': 405,
+            'msg': '请求方式错误',
+            'data': None,
+            'success': False
+        })
+
+
+# 合并大文件分片
+@csrf_exempt
+def merge_big_file_slice(request):
+    if request.method == 'GET':
+        file_name = request.GET.get('fileName', None)
+        print(file_name)
+        save_dir = os.path.join(BASE_DIR, 'static', 'uploadFiles', 'temp', 'files', f'{file_name.split(".")[0]}')
+        # 文件夹存在则进行合并
+        if os.path.exists(save_dir):
+            # 获取文件夹下的所有文件名
+            file_list = os.listdir(save_dir)
+            # 根据文件名中的 -----数字.part 进行排序
+            file_list.sort(key=lambda x: int(x.split('-----')[-1].split('.')[0]))
+
+            print(file_list)
+            # 创建新文件
+            with open(os.path.join(BASE_DIR, 'static', 'uploadFiles', 'temp', 'files', file_name), 'wb') as f:
+                # 将分片文件内容写入新文件
+                for file in file_list:
+                    with open(os.path.join(save_dir, file), 'rb') as f1:
+                        f.write(f1.read())
+
+            # 合并完成后删除存放分片文件的文件夹
+            for file in file_list:
+                os.remove(os.path.join(save_dir, file))
+            os.rmdir(save_dir)
+
+        return JsonResponse({
+            'code': 200,
+            'status': 'success',
+            'msg': '合并分片成功',
+            'data': {
                 'fileName': file_name
             }
         })
